@@ -1,5 +1,5 @@
 """
-ASGI config for agent_frontend project.
+ASGI config for ClassAgent project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "agent_frontend.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ClassAgent.settings")
 
 application = get_asgi_application()
