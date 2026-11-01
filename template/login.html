@@ -1,0 +1,273 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#111315">
+    <meta name="description" content="ClassAgent 账号登录">
+    <title>登录 · ClassAgent</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+<div class="login-page" data-ak-ui>
+    <a class="skip-link" href="#login-username">跳到登录表单</a>
+
+    <div class="login-shell">
+        <header class="login-topbar">
+            <a class="brand" href="/" aria-label="ClassAgent 首页">
+                <span class="brand__mark" aria-hidden="true">CA</span>
+                <span class="brand__text">
+                    <span class="brand__name">CLASSAGENT</span>
+                    <span class="brand__sub">班级智能协作系统</span>
+                </span>
+            </a>
+
+            <div class="topbar__meta">
+                <span class="topbar__label" aria-hidden="true">LOCAL TIME</span>
+                <span class="sr-only">本地时间：</span>
+                <time class="topbar__clock" data-clock datetime="">--</time>
+            </div>
+        </header>
+
+        <main class="login-main">
+            <div class="login-intro">
+                <p class="login-lede">课程、成员与班级事务在这里汇合。完成身份验证，继续今天的工作。</p>
+            </div>
+
+            <div class="login-stage">
+                <section class="login-panel" aria-labelledby="login-title">
+                    <div class="panel-head">
+                        <div>
+                            <p class="panel-kicker">MEMBER ACCESS</p>
+                            <h1 id="login-title">账号登录</h1>
+                        </div>
+                        <span class="panel-badge" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" focusable="false">
+                                <circle cx="8" cy="12" r="3.2"></circle>
+                                <path d="M11.2 12H21M18 12v3M15 12v2"></path>
+                            </svg>
+                        </span>
+                    </div>
+
+                    <form class="login-form" id="login-form" method="post" action="{% url 'login' %}" novalidate data-login-form>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="login-notice" role="alert">
+                                {% for error in form.non_field_errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="login-field">
+                            <div class="login-field__head">
+                                <label class="login-field__label" for="login-username">{{ form.username.label }}</label>
+                                <span class="login-field__code" id="username-hint">USERNAME</span>
+                            </div>
+                            <div class="login-control"{% if form.username.errors %} data-invalid{% endif %}>
+                                <svg class="login-control__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true" focusable="false">
+                                    <circle cx="12" cy="8" r="3.5"></circle>
+                                    <path d="M5 20c.6-3.6 3.3-6 7-6s6.4 2.4 7 6"></path>
+                                </svg>
+                                <input
+                                    id="login-username"
+                                    name="{{ form.username.html_name }}"
+                                    type="text"
+                                    class="login-input"
+                                    value="{{ form.username.value|default_if_none:'' }}"
+                                    placeholder="用户名"
+                                    autocomplete="username"
+                                    autocapitalize="none"
+                                    spellcheck="false"
+                                    maxlength="{{ form.username.field.max_length }}"
+                                    required
+                                    aria-describedby="username-hint username-error"
+                                    data-error="username-error"
+                                    {% if form.username.errors %}aria-invalid="true"{% endif %}
+                                >
+                            </div>
+                            <p class="login-field__error" id="username-error"{% if not form.username.errors %} hidden{% endif %}>{% if form.username.errors %}{% for error in form.username.errors %}{{ error }}{% endfor %}{% else %}请输入账号。{% endif %}</p>
+                        </div>
+
+                        <div class="login-field">
+                            <div class="login-field__head">
+                                <label class="login-field__label" for="login-password">{{ form.password.label }}</label>
+                                <span class="login-field__code" id="password-hint">PASSWORD</span>
+                            </div>
+                            <div class="login-control"{% if form.password.errors %} data-invalid{% endif %}>
+                                <svg class="login-control__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true" focusable="false">
+                                    <rect x="5" y="10" width="14" height="10"></rect>
+                                    <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                                    <path d="M12 14v2"></path>
+                                </svg>
+                                <input
+                                    id="login-password"
+                                    name="{{ form.password.html_name }}"
+                                    type="password"
+                                    class="login-input"
+                                    placeholder="输入登录密码"
+                                    autocomplete="current-password"
+                                    required
+                                    aria-describedby="password-hint password-error"
+                                    data-error="password-error"
+                                    {% if form.password.errors %}aria-invalid="true"{% endif %}
+                                >
+                                <button
+                                    class="password-toggle"
+                                    type="button"
+                                    aria-controls="login-password"
+                                    aria-pressed="false"
+                                    aria-label="显示密码"
+                                    data-password-toggle
+                                >
+                                    <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true" focusable="false">
+                                        <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
+                                        <circle cx="12" cy="12" r="2.5"></circle>
+                                    </svg>
+                                    <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" aria-hidden="true" focusable="false">
+                                        <path d="M4 4 20 20"></path>
+                                        <path d="M9.9 5.2A10.5 10.5 0 0 1 12 5c6 0 9.5 7 9.5 7a15 15 0 0 1-3.3 4.1"></path>
+                                        <path d="M6.1 7.6A15.8 15.8 0 0 0 2.5 12s3.5 7 9.5 7a10.6 10.6 0 0 0 4.4-1"></path>
+                                        <path d="M10.2 10.4a2.4 2.4 0 0 0 3.3 3.3"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="login-field__error" id="password-error"{% if not form.password.errors %} hidden{% endif %}>{% if form.password.errors %}{% for error in form.password.errors %}{{ error }}{% endfor %}{% else %}请输入密码。{% endif %}</p>
+                            <p class="login-caps" id="caps-hint" role="status" aria-live="polite" hidden>CAPS 已开启</p>
+                        </div>
+
+                        <button class="login-submit" type="submit" data-submit>
+                            <span data-submit-label>进入系统</span>
+                            <span class="login-submit__arrow" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" focusable="false">
+                                    <path d="M5 12h13M12 5l7 7-7 7"></path>
+                                </svg>
+                            </span>
+                        </button>
+                    </form>
+
+                    <p class="panel-foot">
+                        <span class="panel-foot__mark" aria-hidden="true"></span>
+                        无法登录？请联系班级管理员重置账号。
+                    </p>
+                </section>
+            </div>
+        </main>
+
+        <footer class="login-footer">
+            <span>CLASSAGENT // 班级智能协作</span>
+            <span>仅限授权成员使用 · © 2026</span>
+        </footer>
+    </div>
+</div>
+
+<script>
+    (() => {
+        'use strict';
+
+        /* Local clock */
+        const clock = document.querySelector('[data-clock]');
+        if (clock) {
+            const pad = (value) => String(value).padStart(2, '0');
+            const renderClock = () => {
+                const now = new Date();
+                clock.textContent = `${now.getFullYear()}.${pad(now.getMonth() + 1)}.${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+                clock.setAttribute('datetime', now.toISOString());
+            };
+            renderClock();
+            window.setInterval(renderClock, 1000);
+        }
+
+        /* Password visibility */
+        document.querySelectorAll('[data-password-toggle]').forEach((toggle) => {
+            const input = document.getElementById(toggle.getAttribute('aria-controls'));
+            if (!input) {
+                return;
+            }
+
+            toggle.addEventListener('click', () => {
+                const show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                toggle.setAttribute('aria-pressed', String(show));
+                toggle.setAttribute('aria-label', show ? '隐藏密码' : '显示密码');
+            });
+        });
+
+        /* Caps Lock hint */
+        const passwordInput = document.getElementById('login-password');
+        const capsHint = document.getElementById('caps-hint');
+        if (passwordInput && capsHint) {
+            const syncCaps = (event) => {
+                const active = typeof event.getModifierState === 'function' && event.getModifierState('CapsLock');
+                capsHint.hidden = !active;
+            };
+
+            passwordInput.addEventListener('keydown', syncCaps);
+            passwordInput.addEventListener('keyup', syncCaps);
+            passwordInput.addEventListener('blur', () => {
+                capsHint.hidden = true;
+            });
+        }
+
+        /* Inline validation and submit feedback */
+        const form = document.querySelector('[data-login-form]');
+        if (form) {
+            const fields = Array.from(form.querySelectorAll('input[required]'));
+
+            const setFieldState = (input, invalid) => {
+                const control = input.closest('.login-control');
+                const error = document.getElementById(input.dataset.error || '');
+
+                input.setAttribute('aria-invalid', String(invalid));
+
+                if (control) {
+                    if (invalid) {
+                        control.setAttribute('data-invalid', '');
+                    } else {
+                        control.removeAttribute('data-invalid');
+                    }
+                }
+
+                if (error) {
+                    error.hidden = !invalid;
+                }
+            };
+
+            form.addEventListener('submit', (event) => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    fields.forEach((input) => setFieldState(input, !input.validity.valid));
+
+                    const firstInvalid = fields.find((input) => !input.validity.valid);
+                    if (firstInvalid) {
+                        firstInvalid.focus();
+                    }
+                    return;
+                }
+
+                fields.forEach((input) => setFieldState(input, false));
+
+                const submit = form.querySelector('[data-submit]');
+                if (submit) {
+                    submit.setAttribute('aria-busy', 'true');
+                    const label = submit.querySelector('[data-submit-label]');
+                    if (label) {
+                        label.textContent = '正在验证';
+                    }
+                }
+            });
+
+            fields.forEach((input) => {
+                input.addEventListener('input', () => {
+                    if (input.validity.valid) {
+                        setFieldState(input, false);
+                    }
+                });
+            });
+        }
+    })();
+</script>
+</body>
+</html>
