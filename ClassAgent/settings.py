@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "user",
-    "core.apps.CoreConfig"
+    "core"
 ]
 
 MIDDLEWARE = [
@@ -102,6 +102,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'user.User'
+
+AUTHENTICATION_BACKENDS = [
+    "user.backends.UserNoOrEmailBackend"
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
