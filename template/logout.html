@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#111315">
+    <meta name="description" content="ClassAgent 退出登录确认">
+    <title>退出登录 · ClassAgent</title>
+    <link rel="stylesheet" href="{% static 'css/logout.css' %}">
+</head>
+<body>
+<div class="logout-page" data-ak-ui>
+    <a class="logout-skip" href="#logout-actions">跳到退出操作</a>
+
+    <div class="logout-shell">
+        <header class="logout-topbar">
+            <a class="logout-brand" href="/dashboard/" aria-label="返回 ClassAgent 控制台">
+                <span class="logout-brand__mark" aria-hidden="true">CA</span>
+                <span class="logout-brand__text">
+                    <span class="logout-brand__name">CLASSAGENT</span>
+                    <span class="logout-brand__sub">班级智能协作系统</span>
+                </span>
+            </a>
+
+            <div class="logout-topbar__meta">
+                <span class="logout-topbar__label" aria-hidden="true">SERVER TIME</span>
+                <span class="sr-only">服务器时间：</span>
+                <time class="logout-topbar__time" datetime="{% now 'c' %}">{% now "Y.m.d H:i" %}</time>
+            </div>
+        </header>
+
+        <main class="logout-main">
+            <div class="logout-stage">
+                <section class="logout-console" aria-labelledby="logout-title">
+                    <div class="logout-console__rail" aria-hidden="true">
+                        <span class="logout-console__rail-line"></span>
+                        <span class="logout-console__rail-text">SESSION END</span>
+                    </div>
+
+                    <div class="logout-console__body">
+                        <div class="logout-head">
+                            <div>
+                                <p class="logout-kicker">SESSION TERMINATION</p>
+                                <h1 id="logout-title">确认退出登录</h1>
+                            </div>
+                            <a class="logout-back" href="/dashboard/" aria-label="返回上一步" title="返回上一步" data-back>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true" focusable="false">
+                                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <p class="logout-lede">
+                            当前会话即将结束。退出后需要重新验证身份，未保存的更改不会保留。
+                        </p>
+
+                        <div class="logout-account" role="group" aria-label="当前登录账号">
+                            <span class="logout-account__avatar" aria-hidden="true">{{ user.display_name|default:user.user_id|slice:":1"|upper }}</span>
+                            <div class="logout-account__identity">
+                                <p class="logout-account__name">{{ user.display_name|default:user.user_id }}</p>
+                                <p class="logout-account__meta">
+                                    <span class="logout-account__id">{{ user.user_id }}</span>
+                                    <span class="logout-account__role">{{ user.get_role_display }}</span>
+                                </p>
+                            </div>
+                            <span class="logout-account__status">
+                                <span class="logout-account__dot" aria-hidden="true"></span>
+                                会话有效
+                            </span>
+                        </div>
+
+                        <dl class="logout-meta">
+                            <div>
+                                <dt>ACCOUNT</dt>
+                                <dd>{{ user.user_id|default:"—" }}</dd>
+                            </div>
+                            <div>
+                                <dt>LAST LOGIN</dt>
+                                <dd>
+                                    {% if user.last_login %}
+                                        {{ user.last_login|date:"Y.m.d H:i" }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </dd>
+                            </div>
+                        </dl>
+
+                        <div class="logout-actions" id="logout-actions" tabindex="-1">
+                            <form class="logout-form" method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button class="logout-confirm" type="submit">
+                                    <span>确认退出</span>
+                                    <span class="logout-confirm__icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" focusable="false">
+                                            <path d="M5 12h13M12 5l7 7-7 7"></path>
+                                        </svg>
+                                    </span>
+                                </button>
+                            </form>
+
+                            <a class="logout-cancel" href="/dashboard/">
+                                <span>取消，返回控制台</span>
+                            </a>
+                        </div>
+
+                        <p class="logout-foot">
+                            <span class="logout-foot__mark" aria-hidden="true"></span>
+                            共享设备上退出后，请关闭浏览器窗口。
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="logout-footer">
+            <span>CLASSAGENT // 班级智能协作</span>
+            <span>安全会话 · 仅限授权成员</span>
+        </footer>
+    </div>
+</div>
+
+<script>
+    (() => {
+        const back = document.querySelector('[data-back]');
+
+        if (!back) {
+            return;
+        }
+
+        back.addEventListener('click', (event) => {
+            if (
+                event.defaultPrevented ||
+                event.button !== 0 ||
+                event.metaKey ||
+                event.ctrlKey ||
+                event.shiftKey ||
+                event.altKey
+            ) {
+                return;
+            }
+
+            if (window.history.length > 1) {
+                event.preventDefault();
+                window.history.back();
+            }
+        });
+    })();
+</script>
+</body>
+</html>

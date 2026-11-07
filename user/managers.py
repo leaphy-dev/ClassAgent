@@ -1,7 +1,7 @@
 # user/managers.py
 from django.contrib.auth.models import BaseUserManager
 
-from user.models.user import UserRole
+from .models.enum import UserRole
 
 
 class UserManager(BaseUserManager):

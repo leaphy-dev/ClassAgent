@@ -1,0 +1,812 @@
+/* ==========================================================================
+   ak-ui foundation tokens — @yunyoujun/ak-ui 1.1.0 (tokens.css)
+   Self-contained token layer for the standalone logout template.
+   ========================================================================== */
+:root {
+    --ak-color-white: white;
+    --ak-color-black: black;
+    --ak-color-low: #9c9c9c;
+    --ak-color-basic: #d8dd5a;
+    --ak-color-primary: #4aabea;
+    --ak-color-secondary: #cfc2d1;
+    --ak-color-advanced: #f1c644;
+    --ak-color-accent: #f6540e;
+    --ak-color-blue: #2bf;
+    --ak-color-yellow: #ffd802;
+    --ak-color-dark-blue: #0075a8;
+    --ak-color-light-blue: #3ff7ff;
+    --ak-color-gray: #313131;
+    --ak-color-dark: #222;
+    --ak-surface-canvas: #111315;
+    --ak-surface-panel: rgba(253, 253, 251, 0.9);
+    --ak-surface-muted: rgba(235, 236, 235, 0.9);
+    --ak-surface-raised: rgba(66, 66, 66, 0.92);
+    --ak-surface-inverse: #17191b;
+    --ak-text-primary: #f8f8f5;
+    --ak-text-secondary: rgba(248, 248, 245, 0.68);
+    --ak-text-inverse: #1b1d1f;
+    --ak-signal-info: var(--ak-color-primary);
+    --ak-signal-action: var(--ak-color-advanced);
+    --ak-signal-accent: var(--ak-color-accent);
+    --ak-signal-success: #46c47c;
+    --ak-signal-danger: #e33b3b;
+    --ak-signal-disabled: var(--ak-color-low);
+    --ak-font-sans: Noto Sans SC, Roboto, Arial, sans-serif;
+    --ak-font-serif: Noto Serif SC, serif;
+    --ak-font-mono: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --ak-font-command: var(--ak-font-serif);
+    --ak-type-display-size: clamp(2.25rem, 5vw, 4.5rem);
+    --ak-type-title-size: 3rem;
+    --ak-type-label-size: 0.75rem;
+    --ak-type-data-size: 1rem;
+    --ak-type-tight: -0.04em;
+    --ak-type-wide: 0.12em;
+    --ak-space-1: 0.25rem;
+    --ak-space-2: 0.5rem;
+    --ak-space-3: 0.75rem;
+    --ak-space-4: 1rem;
+    --ak-space-5: 1.5rem;
+    --ak-space-6: 2rem;
+    --ak-density-control-height: 2.75rem;
+    --ak-density-panel-padding: var(--ak-space-5);
+    --ak-line-hairline: 1px;
+    --ak-line-strong: 4px;
+    --ak-cut-sm: 0.375rem;
+    --ak-cut-md: 0.75rem;
+    --ak-cut-lg: 1.5rem;
+    --ak-radius-subtle: 2px;
+    --ak-shadow-panel: 0 1rem 2rem rgba(0, 0, 0, 0.32);
+    --ak-shadow-signal: 0 0 1rem color-mix(in srgb, var(--ak-signal-info) 62%, transparent);
+    --ak-depth-perspective: 30em;
+    --ak-motion-fast: 120ms;
+    --ak-motion-base: 200ms;
+    --ak-motion-slow: 420ms;
+    --ak-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --ak-ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ak-focus-color: var(--ak-signal-action);
+    --ak-focus-width: 3px;
+    --ak-focus-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Page host
+   -------------------------------------------------------------------------- */
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--ak-surface-canvas);
+}
+
+.logout-page,
+.logout-page *,
+.logout-page *::before,
+.logout-page *::after {
+    box-sizing: border-box;
+}
+
+.logout-page {
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow-x: hidden;
+    color: var(--ak-text-primary);
+    background: var(--ak-surface-canvas);
+    font-family: var(--ak-font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+.logout-page::before {
+    position: absolute;
+    z-index: -2;
+    inset: 0;
+    content: "";
+    background:
+        radial-gradient(circle at 18% 10%, rgba(74, 171, 234, 0.09), transparent 30rem),
+        radial-gradient(circle at 84% 88%, rgba(241, 198, 68, 0.06), transparent 26rem),
+        linear-gradient(135deg, #14171a 0%, #0e1012 52%, #121417 100%);
+}
+
+.logout-page::after {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    content: "";
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(248, 248, 245, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(248, 248, 245, 0.05) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(circle at 50% 46%, #000 0%, rgba(0, 0, 0, 0.52) 46%, transparent 78%);
+    mask-image: radial-gradient(circle at 50% 46%, #000 0%, rgba(0, 0, 0, 0.52) 46%, transparent 78%);
+}
+
+.logout-page ::selection {
+    color: var(--ak-text-inverse);
+    background: var(--ak-signal-action);
+}
+
+.logout-page :focus-visible {
+    outline: var(--ak-focus-width) solid var(--ak-focus-color);
+    outline-offset: var(--ak-focus-offset);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.logout-skip {
+    position: absolute;
+    z-index: 20;
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.7rem 1rem;
+    color: var(--ak-text-inverse);
+    background: var(--ak-signal-action);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-decoration: none;
+    transform: translateY(-200%);
+    transition: transform var(--ak-motion-fast) var(--ak-ease-standard);
+}
+
+.logout-skip:focus {
+    transform: translateY(0);
+}
+
+.logout-skip:focus-visible {
+    outline-color: var(--ak-text-primary);
+}
+
+.logout-shell {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: min(100%, 1240px);
+    min-height: 100vh;
+    min-height: 100svh;
+    margin-inline: auto;
+    padding: clamp(1rem, 2.2vw, 1.75rem) clamp(1.25rem, 4vw, 4rem) clamp(1.25rem, 2.5vw, 2rem);
+    grid-template-rows: auto 1fr auto;
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+.logout-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ak-space-4);
+    padding-bottom: clamp(1rem, 2vw, 1.25rem);
+    border-bottom: 1px solid rgba(248, 248, 245, 0.14);
+}
+
+.logout-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 2.75rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+.logout-brand__mark {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--ak-text-inverse);
+    background: var(--ak-signal-action);
+    clip-path: polygon(0 0, calc(100% - var(--ak-cut-sm)) 0, 100% var(--ak-cut-sm), 100% 100%, 0 100%);
+    font-family: var(--ak-font-mono);
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    transition: transform var(--ak-motion-fast) var(--ak-ease-standard);
+}
+
+.logout-brand:hover .logout-brand__mark {
+    transform: translateY(-2px);
+}
+
+.logout-brand:hover .logout-brand__name {
+    color: var(--ak-signal-action);
+}
+
+.logout-brand:active .logout-brand__mark {
+    transform: translateY(0);
+}
+
+.logout-brand__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.logout-brand__name {
+    font-family: var(--ak-font-mono);
+    font-size: 0.875rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    transition: color var(--ak-motion-fast) var(--ak-ease-standard);
+}
+
+.logout-brand__sub {
+    color: var(--ak-text-secondary);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+}
+
+.logout-topbar__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    color: var(--ak-text-secondary);
+    font-family: var(--ak-font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+}
+
+.logout-topbar__label {
+    color: var(--ak-text-secondary);
+}
+
+.logout-topbar__time {
+    color: var(--ak-text-primary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Main composition
+   -------------------------------------------------------------------------- */
+.logout-main {
+    display: grid;
+    place-items: center;
+    padding-block: clamp(2rem, 6vh, 4rem);
+}
+
+.logout-stage {
+    position: relative;
+    width: 100%;
+    max-width: 46rem;
+}
+
+.logout-stage::before {
+    position: absolute;
+    inset: 0.85rem -0.85rem -0.85rem 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--ak-signal-action) 30%, transparent);
+    border-top: 0;
+    border-left: 0;
+    content: "";
+    pointer-events: none;
+}
+
+.logout-console {
+    --ak-focus-color: var(--ak-color-dark-blue);
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    width: 100%;
+    color: var(--ak-text-inverse);
+    background: var(--ak-surface-panel);
+    border-top: var(--ak-line-strong) solid var(--ak-signal-action);
+    box-shadow: var(--ak-shadow-panel);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--ak-cut-lg)), calc(100% - var(--ak-cut-lg)) 100%, 0 100%);
+}
+
+.logout-console__rail {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--ak-surface-inverse);
+    border-right: 1px solid rgba(248, 248, 245, 0.12);
+}
+
+.logout-console__rail-line {
+    position: absolute;
+    top: 1.25rem;
+    bottom: 1.25rem;
+    left: 50%;
+    width: 1px;
+    background: rgba(248, 248, 245, 0.18);
+}
+
+.logout-console__rail-text {
+    position: relative;
+    padding-block: 0.55rem;
+    color: var(--ak-signal-action);
+    background: var(--ak-surface-inverse);
+    font-family: var(--ak-font-mono);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    text-orientation: mixed;
+    writing-mode: vertical-rl;
+}
+
+.logout-console__body {
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+/* --------------------------------------------------------------------------
+   Console content
+   -------------------------------------------------------------------------- */
+.logout-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(27, 29, 31, 0.16);
+}
+
+.logout-kicker {
+    margin: 0 0 0.4rem;
+    color: #5b6266;
+    font-family: var(--ak-font-mono);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+}
+
+.logout-head h1 {
+    margin: 0;
+    color: var(--ak-text-inverse);
+    font-family: var(--ak-font-serif);
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+}
+
+.logout-back {
+    --ak-focus-color: var(--ak-signal-action);
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--ak-signal-action);
+    background: transparent;
+    text-decoration: none;
+    transition: transform var(--ak-motion-fast) var(--ak-ease-standard);
+}
+
+.logout-back::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    content: "";
+    background: var(--ak-text-inverse);
+    clip-path: polygon(0 0, calc(100% - var(--ak-cut-sm)) 0, 100% var(--ak-cut-sm), 100% 100%, 0 100%);
+    transition: background-color var(--ak-motion-fast) var(--ak-ease-standard);
+}
+
+.logout-back:hover {
+    transform: translateY(-1px);
+}
+
+.logout-back:hover::before {
+    background: color-mix(in srgb, var(--ak-text-inverse) 84%, white);
+}
+
+.logout-back:active {
+    transform: translateY(1px);
+}
+
+.logout-back svg {
+    position: relative;
+    z-index: 1;
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.logout-lede {
+    max-width: 34rem;
+    margin: 0;
+    color: color-mix(in srgb, var(--ak-text-inverse) 74%, transparent);
+    font-size: clamp(0.9rem, 1.1vw, 0.95rem);
+    line-height: 1.8;
+}
+
+.logout-account {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+    padding: 0.85rem;
+    background: #f3f4ef;
+    border: 1px solid color-mix(in srgb, var(--ak-text-inverse) 16%, transparent);
+    border-left: 4px solid var(--ak-signal-info);
+}
+
+.logout-account__avatar {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--ak-text-inverse);
+    background: var(--ak-signal-action);
+    clip-path: polygon(0 0, calc(100% - var(--ak-cut-sm)) 0, 100% var(--ak-cut-sm), 100% 100%, 0 100%);
+    font-family: var(--ak-font-mono);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.logout-account__identity {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.logout-account__name {
+    margin: 0;
+    color: var(--ak-text-inverse);
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.logout-account__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    color: #5b6266;
+    font-family: var(--ak-font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+}
+
+.logout-account__id {
+    overflow-wrap: anywhere;
+}
+
+.logout-account__role {
+    padding: 0.18rem 0.4rem;
+    color: var(--ak-text-inverse);
+    background: color-mix(in srgb, var(--ak-signal-info) 18%, transparent);
+    border-left: 2px solid var(--ak-signal-info);
+    font-weight: 700;
+}
+
+.logout-account__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+    color: #2f6b4a;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.logout-account__dot {
+    flex: 0 0 auto;
+    width: 0.45rem;
+    height: 0.45rem;
+    background: var(--ak-signal-success);
+}
+
+.logout-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0.85rem 0;
+    border-top: 1px solid rgba(27, 29, 31, 0.12);
+    border-bottom: 1px solid rgba(27, 29, 31, 0.12);
+}
+
+.logout-meta div {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.logout-meta dt {
+    color: #5b6266;
+    font-family: var(--ak-font-mono);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
+}
+
+.logout-meta dd {
+    margin: 0;
+    color: var(--ak-text-inverse);
+    font-family: var(--ak-font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* --------------------------------------------------------------------------
+   Actions
+   -------------------------------------------------------------------------- */
+.logout-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0.75rem;
+}
+
+.logout-form {
+    display: flex;
+    flex: 1 1 16rem;
+    min-width: 0;
+}
+
+.logout-confirm {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.75rem 0.85rem 0.75rem 1.1rem;
+    color: var(--ak-text-inverse);
+    background: var(--ak-signal-action);
+    border: 0;
+    cursor: pointer;
+    font-family: var(--ak-font-sans);
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-align: left;
+    transition:
+        background-color var(--ak-motion-fast) var(--ak-ease-standard),
+        box-shadow var(--ak-motion-fast) var(--ak-ease-standard),
+        transform var(--ak-motion-fast) var(--ak-ease-standard);
+}
+
+.logout-confirm:hover {
+    background: color-mix(in srgb, var(--ak-signal-action) 86%, white);
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.18);
+    transform: translateY(-1px);
+}
+
+.logout-confirm:active {
+    box-shadow: none;
+    transform: translateY(1px);
+}
+
+.logout-confirm__icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    color: var(--ak-signal-action);
+    background: var(--ak-text-inverse);
+    transition: transform var(--ak-motion-fast) var(--ak-ease-standard);
+}
+
+.logout-confirm:hover .logout-confirm__icon {
+    transform: translateX(3px);
+}
+
+.logout-confirm__icon svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.logout-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 14rem;
+    min-width: 0;
+    min-height: 3.25rem;
+    padding: 0.75rem 1rem;
+    color: var(--ak-text-inverse);
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--ak-text-inverse) 30%, transparent);
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+    text-decoration: none;
+    transition:
+        background-color var(--ak-motion-fast) var(--ak-ease-standard),
+        border-color var(--ak-motion-fast) var(--ak-ease-standard),
+        transform var(--ak-motion-fast) var(--ak-ease-standard);
+}
+
+.logout-cancel:hover {
+    background: rgba(27, 29, 31, 0.06);
+    border-color: color-mix(in srgb, var(--ak-text-inverse) 48%, transparent);
+}
+
+.logout-cancel:active {
+    transform: translateY(1px);
+}
+
+.logout-foot {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0;
+    padding-top: 1rem;
+    color: #5b6266;
+    border-top: 1px solid rgba(27, 29, 31, 0.16);
+    font-size: 0.75rem;
+    line-height: 1.6;
+}
+
+.logout-foot__mark {
+    flex: 0 0 auto;
+    width: 0.45rem;
+    height: 0.45rem;
+    margin-top: 0.45rem;
+    background: var(--ak-signal-action);
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+.logout-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    color: var(--ak-text-secondary);
+    border-top: 1px solid rgba(248, 248, 245, 0.14);
+    font-family: var(--ak-font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   Motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+    .logout-stage {
+        animation: logout-rise var(--ak-motion-base) var(--ak-ease-emphasized) both;
+        animation-delay: 60ms;
+    }
+
+    @keyframes logout-rise {
+        from {
+            opacity: 0;
+            transform: translateY(14px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logout-page *,
+    .logout-page *::before,
+    .logout-page *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+    .logout-console {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .logout-console__rail {
+        display: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .logout-shell {
+        padding: 1rem 1rem 1.25rem;
+    }
+
+    .logout-topbar {
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .logout-brand__sub {
+        display: none;
+    }
+
+    .logout-topbar__label {
+        display: none;
+    }
+
+    .logout-topbar__meta {
+        font-size: 0.625rem;
+        letter-spacing: 0.08em;
+    }
+
+    .logout-main {
+        padding-block: 2rem;
+    }
+
+    .logout-stage::before {
+        display: none;
+    }
+
+    .logout-console {
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--ak-cut-md)), calc(100% - var(--ak-cut-md)) 100%, 0 100%);
+    }
+
+    .logout-console__body {
+        padding: 1.25rem;
+    }
+
+    .logout-account {
+        align-items: flex-start;
+    }
+
+    .logout-account__status {
+        display: none;
+    }
+
+    .logout-meta {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .logout-actions {
+        flex-direction: column;
+    }
+
+    .logout-form,
+    .logout-cancel {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    .logout-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+    }
+}
+
+@media (forced-colors: active) {
+    .logout-console,
+    .logout-account,
+    .logout-confirm,
+    .logout-cancel {
+        border: 1px solid ButtonText;
+    }
+}

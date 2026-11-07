@@ -1,13 +1,8 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
+from .enum import UserRole
 from ..managers import UserManager
-
-class UserRole(models.TextChoices):
-    GUEST = 'GUEST'
-    STUDENT = 'STUDENT'
-    TEACHER = 'TEACHER'
-    ADMIN = 'ADMIN'
 
 class User(AbstractUser):
     """
@@ -34,7 +29,7 @@ class User(AbstractUser):
     objects = UserManager()
 
     def is_admin(self) -> bool:
-        return self.role == UserRole.ADMIN
+        return self.role == UserRole.ADMIN or self.is_superuser
 
     def is_teacher(self) -> bool:
         return self.role == UserRole.TEACHER
@@ -44,3 +39,16 @@ class User(AbstractUser):
 
     def display_name(self) -> str:
         return self.get_full_name() or self.user_id
+
+    def ban(self):
+        if self.is_active:
+            self.is_active = False
+            self.save()
+
+    def unban(self):
+        if not self.is_active:
+            self.is_active = True
+            self.save()
+
+    def is_banned(self) -> bool:
+        return self.is_active

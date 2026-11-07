@@ -1,14 +1,14 @@
-from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.auth import login as auth_login
 from django.shortcuts import render, redirect
 from django.views import View
 
+from ..forms import LoginForm
 
 class LoginView(View):
     """
     登录视图类
     """
-    _form_class = AuthenticationForm
+    _form_class = LoginForm
 
     def get(self, request):
         return render(request, "login.html", {"form": self._form_class(request)})

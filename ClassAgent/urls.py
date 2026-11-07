@@ -18,10 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from user.views import LoginView
+from user.views import LoginView, LogoutView
 from core.views import HomeView
 urlpatterns = [
     path('login/', view=LoginView.as_view(), name='login'),
+    path('logout/', view=LogoutView.as_view(), name='logout'),
 
     path('',view=HomeView.as_view(), name='home'),
     path('dashboard/', view=HomeView.as_view(), name='home'),
