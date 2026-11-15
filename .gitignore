@@ -118,3 +118,6 @@ ENV/
 
 # IDE
 .idea/
+
+# WorkBuddy 本地工作数据（记忆、临时导出）
+.workbuddy/

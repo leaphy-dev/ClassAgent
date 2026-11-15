@@ -3,8 +3,17 @@ from django.db import models
 
 
 class ClassRoom(models.Model):
-    """Teaching class. Subject and term are columns on this table."""
+    """Teaching class. A course is the top-level unit; a class belongs to one course."""
 
+    course = models.ForeignKey(
+        "course.Course",
+        on_delete=models.PROTECT,
+        related_name="classrooms",
+        verbose_name="所属课程",
+        null=True,
+        blank=True,
+        help_text="过渡期允许为空，便于兼容已有数据；新数据应由种子脚本或后台统一填充。",
+    )
     serial = models.CharField(
         "serial",
         max_length=32,

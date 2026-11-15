@@ -10,7 +10,7 @@ class User(AbstractUser):
     """
     user_id = models.CharField(
         max_length=10,
-        blank=True,
+        blank=False,
         null=False,
         unique=True,
         verbose_name="ID"
@@ -51,4 +51,4 @@ class User(AbstractUser):
             self.save()
 
     def is_banned(self) -> bool:
-        return self.is_active
+        return not self.is_active

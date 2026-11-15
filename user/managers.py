@@ -10,6 +10,9 @@ class UserManager(BaseUserManager):
             raise ValueError('User ID cannot be empty!')
         if email:
             email = self.normalize_email(email)
+        # AbstractUser 仍保留唯一且必填的 username；虽然登录已改用 user_id，
+        # 不显式填充会让第二个用户撞空串唯一约束。
+        extra_fields.setdefault('username', user_id)
         user = self.model(user_id=user_id, email=email, **extra_fields)
         user.set_password(password)
         user.save()

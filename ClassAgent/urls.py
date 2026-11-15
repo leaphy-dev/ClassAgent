@@ -25,7 +25,7 @@ urlpatterns = [
     path('logout/', view=LogoutView.as_view(), name='logout'),
 
     path('',view=HomeView.as_view(), name='home'),
-    path('dashboard/', view=HomeView.as_view(), name='home'),
+    path('dashboard/', view=HomeView.as_view(), name='dashboard'),
 
     path("admin/", admin.site.urls), # TODO: Will remove in future.
 ]
