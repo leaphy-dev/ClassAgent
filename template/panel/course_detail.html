@@ -1,0 +1,57 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="split">
+    <div class="card">
+        <h2 class="section-title">课程信息</h2>
+        <dl class="kv">
+            <dt>课程代码</dt><dd>{{ course.code }}</dd>
+            <dt>名称</dt><dd>{{ course.name }}</dd>
+            <dt>状态</dt><dd>{{ course.get_status_display }}</dd>
+            <dt>创建者</dt><dd>{{ course.created_by.display_name }}</dd>
+            <dt>简介</dt><dd>{{ course.description|default:"—" }}</dd>
+            <dt>创建时间</dt><dd>{{ course.created_at|date:"Y-m-d H:i" }}</dd>
+        </dl>
+    </div>
+    <div class="card">
+        <h2 class="section-title">数据规模</h2>
+        <div class="mini-grid">
+            <div><b>{{ progress.classes }}</b><small>教学班</small></div>
+            <div><b>{{ progress.points }}</b><small>知识点</small></div>
+            <div><b>{{ progress.questions }}</b><small>题目</small></div>
+            <div><b>{{ progress.assignments }}</b><small>作业</small></div>
+            <div><b>{{ progress.submissions }}</b><small>提交</small></div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card__head">
+        <h2 class="section-title">智能体配置（Dify）</h2>
+        <a class="btn primary" href="{% url 'course_config' course.pk %}">编辑配置</a>
+    </div>
+    {% if config %}
+        <dl class="kv">
+            <dt>API 地址</dt><dd>{{ config.base_url }}</dd>
+            <dt>知识库 ID</dt><dd>{{ config.dataset_id|default:"未配置" }}</dd>
+            <dt>API Key 环境变量</dt><dd><code>{{ config.api_key_env }}</code>（明文由部署环境注入，不落库）</dd>
+            <dt>提示词版本</dt><dd>{{ config.prompt_version }}</dd>
+            <dt>启用状态</dt><dd>{{ config.is_enabled|yesno:"已启用,未启用" }}</dd>
+            <dt>调用就绪</dt><dd><span class="tag {{ config.is_ready|yesno:'ok,warn' }}">{{ config.is_ready|yesno:"已就绪,未就绪" }}</span></dd>
+        </dl>
+        <h3 class="section-title small">工作流槽位</h3>
+        <div class="mini-grid four">
+            {% for item in slots %}
+                <div><b>{{ item.label }}</b><small>{{ item.slot }} · {{ item.value }}</small></div>
+            {% endfor %}
+        </div>
+    {% else %}<p class="empty">尚未生成配置</p>{% endif %}
+</div>
+
+<div class="card">
+    <h2 class="section-title">课程下的教学班</h2>
+    <table class="grid"><thead><tr><th>编号</th><th>科目</th><th>学期</th><th>教师数</th><th>学生数</th></tr></thead>
+        <tbody>{% for c in classes %}<tr><td>{{ c.serial }}</td><td>{{ c.subject }}</td><td>{{ c.term }}</td><td>{{ c.teacher_count }}</td><td>{{ c.student_count }}</td></tr>{% empty %}<tr><td colspan="5" class="empty">暂无教学班</td></tr>{% endfor %}</tbody>
+    </table>
+</div>
+<a class="btn" href="{{ back_url }}">← 返回课程列表</a>
+{% endblock %}

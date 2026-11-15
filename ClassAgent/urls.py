@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 from user.views import LoginView, LogoutView
 from core.views import HomeView
@@ -28,4 +28,6 @@ urlpatterns = [
     path('dashboard/', view=HomeView.as_view(), name='dashboard'),
 
     path("admin/", admin.site.urls), # TODO: Will remove in future.
+
+    path("", include("core.urls")),
 ]

@@ -1,0 +1,21 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="cards">
+    <div class="stat"><span class="stat__label">本次得分</span><b class="stat__value">{{ submission.score }}</b><small>满分 {{ assignment.total_score }}</small></div>
+    <div class="stat"><span class="stat__label">状态</span><b class="stat__value small">{{ submission.get_status_display }}</b><small>{{ submission.submitted_at|date:"Y-m-d H:i" }}</small></div>
+    <div class="stat"><span class="stat__label">题数</span><b class="stat__value">{{ answers|length }}</b><small>逐题记录</small></div>
+    <div class="stat"><span class="stat__label">错题复盘</span><b class="stat__value small"><a class="link" href="{% url 'wrong_list' %}">前往 →</a></b><small>按优先级排序</small></div>
+</div>
+
+<div class="card">
+    <h2 class="section-title">逐题结果</h2>
+    <table class="grid"><thead><tr><th>#</th><th>题目</th><th>你的答案</th><th>参考答案</th><th>结果</th><th>得分</th><th>解析</th></tr></thead>
+        <tbody>{% for a in answers %}<tr>
+            <td>{{ forloop.counter }}</td><td>{{ a.question.title|truncatechars:30 }}</td>
+            <td>{{ a.answer|default:"—" }}</td><td>{{ a.question.answer }}</td>
+            <td>{% if a.is_correct is None %}<span class="tag warn">待复核</span>{% elif a.is_correct %}<span class="tag ok">正确</span>{% else %}<span class="tag error">错误</span>{% endif %}</td>
+            <td>{{ a.score }}</td><td>{{ a.question.analysis|default:"—" }}{% if a.feedback %}<br>批注：{{ a.feedback }}{% endif %}</td>
+        </tr>{% empty %}<tr><td colspan="7" class="empty">暂无作答记录</td></tr>{% endfor %}</tbody></table>
+</div>
+<a class="btn" href="{{ back_url }}">← 返回作业列表</a>
+{% endblock %}

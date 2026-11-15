@@ -1,10 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% load static %}<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClassAgent · 智慧教学与课程智能体</title><link rel="stylesheet" href="{% static 'css/panel.css' %}"></head>
+<body class="standalone">
+<div class="landing">
+    <header class="landing__top">
+        <span class="brand__mark">CA</span><b>CLASSAGENT</b>
+        <span class="muted">上海大学 · 数据结构与算法基础课程项目</span>
+    </header>
+    <main class="landing__main">
+        <p class="crumb">COURSE AGENT / 2026 秋</p>
+        <h1>课程、知识点与学情，<br>汇于一套系统。</h1>
+        <p class="lead">以课程为顶层单位，管理员配置知识库与工作流，教师治理知识点与作业，
+            学生学习、作答、复盘，三端在同一份数据上闭环。</p>
+        <div class="form-actions"><a class="btn primary big" href="{% url 'login' %}">登录系统 →</a></div>
+        <div class="landing__roles">
+            <div><b>管理员端</b><small>课程配置 · 用户角色 · 审计</small></div>
+            <div><b>教师端</b><small>知识点治理 · 作业 · 学情</small></div>
+            <div><b>学生端</b><small>作答 · 错题 · 知识图谱</small></div>
+        </div>
+    </main>
+    <footer class="landing__foot">Django 业务底座 + 知识点图谱算法 · Dify 智能体编排预留</footer>
+</div>
+</body></html>

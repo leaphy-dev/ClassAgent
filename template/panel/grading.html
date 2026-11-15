@@ -1,0 +1,32 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="card">
+    <h2 class="section-title">逐题作答 · 当前得分 {{ submission.score }} / {{ submission.assignment.total_score }}</h2>
+    <form method="post" class="grading-form">
+        {% csrf_token %}
+        {% for answer in answers %}
+            <div class="q-block">
+                <div class="q-block__head"><b>第 {{ forloop.counter }} 题</b>
+                    <span class="tag">{{ answer.question.get_qtype_display }}</span>
+                    <span class="muted">{{ answer.question.knowledge_point.name|default:"未分类" }} · {{ answer.question.score }} 分</span>
+                </div>
+                <p>{{ answer.question.title }}</p>
+                <p><span class="muted">学生答案：</span><b>{{ answer.answer|default:"（未作答）" }}</b></p>
+                <p><span class="muted">参考答案：</span>{{ answer.question.answer }}</p>
+                {% if answer.question.is_objective %}
+                    <p><span class="tag {{ answer.is_correct|yesno:'ok,error' }}">{{ answer.is_correct|yesno:"正确,错误" }}</span> 本题得分 {{ answer.score }}</p>
+                {% else %}
+                    <div class="grading-inputs">
+                        <label>得分 <input type="number" name="a_{{ answer.pk }}" min="0" max="{{ answer.question.score }}" value="{{ answer.score }}"></label>
+                        <label><input type="checkbox" name="c_{{ answer.pk }}" {% if answer.is_correct %}checked{% endif %}> 判定正确</label>
+                        <label>批注 <input type="text" name="f_{{ answer.pk }}" value="{{ answer.feedback }}"></label>
+                    </div>
+                {% endif %}
+                {% if answer.question.analysis %}<p class="hint">解析：{{ answer.question.analysis }}</p>{% endif %}
+            </div>
+        {% endfor %}
+        <div class="form-actions"><button class="btn primary" type="submit">保存复核结果</button>
+            <a class="btn" href="{{ back_url }}">返回作业详情</a></div>
+    </form>
+</div>
+{% endblock %}

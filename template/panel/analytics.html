@@ -1,0 +1,39 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="cards">
+    <div class="stat"><span class="stat__label">作业完成率</span><b class="stat__value">{% widthratio data.completion 1 100 %}%</b><small>{{ data.done_count }} / {{ data.available_count }} 份</small></div>
+    <div class="stat"><span class="stat__label">客观题正确率</span><b class="stat__value">{% widthratio data.accuracy 1 100 %}%</b><small>逐题统计</small></div>
+    <div class="stat"><span class="stat__label">平均得分</span><b class="stat__value">{{ data.avg_score }}</b><small>每次提交</small></div>
+    <div class="stat"><span class="stat__label">累计得分</span><b class="stat__value">{{ data.total_score }}</b><small>{{ data.submissions|length }} 次提交</small></div>
+</div>
+
+<div class="card">
+    <h2 class="section-title">知识点掌握度</h2>
+    <table class="grid"><thead><tr><th>知识点</th><th>作答数</th><th>正确数</th><th>正确率</th><th>掌握度</th></tr></thead>
+        <tbody>{% for m in data.mastery %}<tr><td>{{ m.label }}</td><td>{{ m.total }}</td><td>{{ m.correct }}</td>
+            <td>{% widthratio m.rate 1 100 %}%</td>
+            <td><span class="bar"><i style="width:{% widthratio m.rate 1 100 %}%"></i></span></td></tr>
+        {% empty %}<tr><td colspan="5" class="empty">还没有作答数据，先去完成一份作业吧</td></tr>{% endfor %}</tbody></table>
+</div>
+
+<div class="split">
+    <div class="card">
+        <h2 class="section-title">薄弱知识点与学习路径</h2>
+        {% for item in recommendations %}
+            <div class="q-block">
+                <b>{{ item.point }}</b> <span class="tag error">正确率 {% widthratio item.rate 1 100 %}%</span>
+                <p class="hint">建议先复习前置知识点：{% for p in item.pres %}<span class="tag">{{ p }}</span>{% if not forloop.last %} → {% endif %}{% endfor %}</p>
+            </div>
+        {% empty %}<p class="empty">暂无薄弱点数据</p>{% endfor %}
+        <p class="note">前置知识点由图谱反向 BFS 求出，按拓扑序排列。</p>
+    </div>
+    <div class="card">
+        <h2 class="section-title">复习优先队列（Top 5）</h2>
+        <table class="grid"><thead><tr><th>优先级</th><th>题目</th><th>错误次数</th></tr></thead>
+            <tbody>{% for priority, wrong in data.review_queue %}<tr><td>{{ priority|floatformat:3 }}</td>
+                <td>{{ wrong.question.title|truncatechars:32 }}</td><td>{{ wrong.wrong_count }}</td></tr>
+            {% empty %}<tr><td colspan="3" class="empty">队列为空</td></tr>{% endfor %}</tbody></table>
+        <a class="btn primary" href="{% url 'wrong_list' %}">进入错题复盘</a>
+    </div>
+</div>
+{% endblock %}

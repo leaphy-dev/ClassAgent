@@ -1,0 +1,29 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="toolbar"><form class="filters" method="get">
+    <label>课程 <select name="course" onchange="this.form.submit()">
+        {% for c in courses %}<option value="{{ c.pk }}" {% if course.pk == c.pk %}selected{% endif %}>{{ c.code }} {{ c.name }}</option>{% endfor %}
+    </select></label><button class="btn" type="submit">查看</button>
+</form></div>
+
+<div class="card">
+    <h2 class="section-title">学习路径（拓扑分层）</h2>
+    <p class="note">同一层内的知识点可以并行学习；箭头从第 0 层指向更高层。拓扑排序复杂度 O(V + E)。</p>
+    {% for group in levels %}
+        <div class="graph-level">
+            <div class="graph-level__label">第 {{ group.level }} 层<small>前置已完成</small></div>
+            <div class="graph-nodes">
+                {% for point in group.points %}
+                    <div class="graph-node">
+                        <b>{{ point.code }} · {{ point.name }}</b>
+                        <small>{{ point.get_difficulty_display }} · 顺序 {{ point.order }}</small>
+                        <span>前置：
+                            {% for pre in point.prerequisites.all %}<span class="tag">{{ pre.code }}</span>{% empty %}无{% endfor %}
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% empty %}<p class="empty">该课程暂无知识点</p>{% endfor %}
+</div>
+{% endblock %}

@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     "user",
     "core",
     "classroom",
-    "course"
+    "course",
+    "learning",
+    "audit.apps.AuditConfig"
 ]
 
 MIDDLEWARE = [
@@ -52,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "audit.middleware.AuditMiddleware",
 ]
 
 LOGIN_URL = "/login/"

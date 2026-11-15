@@ -1,0 +1,22 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="split">
+    <div class="card">
+        <h2 class="section-title">运行环境</h2>
+        <dl class="kv">
+            <dt>Django 版本</dt><dd>{{ django_version }}</dd>
+            <dt>数据库引擎</dt><dd><code>{{ db_engine }}</code></dd>
+            <dt>DEBUG</dt><dd><span class="tag {{ debug|yesno:'warn,ok' }}">{{ debug|yesno:"开启（开发）,关闭" }}</span></dd>
+            <dt>时区</dt><dd>{{ time_zone }}</dd>
+            <dt>智能体就绪</dt><dd>{{ dify_ready }} / {{ dify_total }} 门课程</dd>
+        </dl>
+        <p class="note">上线前仍需处理：SECRET_KEY 抽到环境变量、STATIC_ROOT 指向独立目录、时区与语言本地化、依赖锁定版本。这些属于工程规范项，不影响 P2 功能闭环。</p>
+    </div>
+    <div class="card">
+        <h2 class="section-title">数据规模</h2>
+        <table class="grid"><thead><tr><th>数据表</th><th>记录数</th></tr></thead>
+            <tbody>{% for label, value in counts.items %}<tr><td>{{ label }}</td><td><b>{{ value }}</b></td></tr>{% endfor %}</tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

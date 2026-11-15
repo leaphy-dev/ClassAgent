@@ -1,0 +1,22 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="cards">
+    {% for card in cards %}
+        <div class="stat"><span class="stat__label">{{ card.label }}</span><b class="stat__value">{{ card.value }}</b><small>{{ card.hint }}</small></div>
+    {% endfor %}
+</div>
+
+<h2 class="section-title">快捷入口</h2>
+<div class="quick-grid">
+    {% for item in quick %}
+        <a class="quick" href="{{ item.url }}"><b>{{ item.label }}</b><small>{{ item.hint }}</small><span>进入 →</span></a>
+    {% endfor %}
+</div>
+
+<h2 class="section-title">{{ recent_title|default:"最近动态" }}</h2>
+<div class="card">
+    {% if recent %}
+        <ul class="timeline">{% for line in recent %}<li>{{ line }}</li>{% endfor %}</ul>
+    {% else %}<p class="empty">暂无记录</p>{% endif %}
+</div>
+{% endblock %}

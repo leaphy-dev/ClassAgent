@@ -1,0 +1,56 @@
+{% load static %}<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title }} · ClassAgent</title>
+    <link rel="stylesheet" href="{% static 'css/panel.css' %}">
+</head>
+<body>
+<div class="app">
+    <aside class="sidebar">
+        <a class="brand" href="{{ role_home }}">
+            <span class="brand__mark">CA</span>
+            <span class="brand__text"><b>CLASSAGENT</b><small>智慧教学 · 课程智能体</small></span>
+        </a>
+        <p class="side-role">{{ role_label }}</p>
+        <nav class="side-nav" aria-label="主导航">
+            {% for item in nav %}
+                <a href="{{ item.url }}" class="{% if request.path == item.url %}active{% endif %}">{{ item.label }}</a>
+            {% endfor %}
+        </nav>
+        <div class="side-foot">
+            <div class="side-user">
+                <span class="avatar">{{ user.user_id|slice:":1" }}</span>
+                <span><b>{{ user.display_name }}</b><small>{{ user.user_id }}</small></span>
+            </div>
+            <a class="side-logout" href="{% url 'logout' %}">退出登录 →</a>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <p class="crumb">ClassAgent / {{ role_label }}</p>
+                <h1>{{ title }}</h1>
+                {% if subtitle %}<p class="subtitle">{{ subtitle }}</p>{% endif %}
+            </div>
+            <div class="top-actions">
+                <a class="chip" href="{% url 'notification_list' %}">通知{% if unread_count %}<span class="badge">{{ unread_count }}</span>{% endif %}</a>
+                <span class="chip muted">{{ role_label }}</span>
+            </div>
+        </header>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}<div class="msg {{ message.tags }}">{{ message }}</div>{% endfor %}
+            </div>
+        {% endif %}
+
+        <section class="content">{% block content %}{% endblock %}</section>
+
+        <footer class="foot">ClassAgent · 数据结构与算法基础课程项目 · 三端业务闭环 P2</footer>
+    </main>
+</div>
+</body>
+</html>

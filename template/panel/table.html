@@ -1,0 +1,70 @@
+{% extends "panel/base.html" %}
+{% block content %}
+{% if cards %}
+<div class="cards">
+    {% for card in cards %}
+        <div class="stat"><span class="stat__label">{{ card.label }}</span><b class="stat__value">{{ card.value }}</b><small>{{ card.hint }}</small></div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="toolbar">
+    <div class="toolbar__actions">
+        {% for action in top_actions %}<a class="btn primary" href="{{ action.url }}">{{ action.label }}</a>{% endfor %}
+    </div>
+    {% if categories or courses %}
+    <form class="filters" method="get">
+        {% if categories %}
+            <label>分类
+                <select name="category" onchange="this.form.submit()">
+                    <option value="">全部</option>
+                    {% for value, label in categories %}
+                        <option value="{{ value }}" {% if current_category == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        {% endif %}
+        {% if courses %}
+            <label>课程
+                <select name="course" onchange="this.form.submit()">
+                    {% for c in courses %}<option value="{{ c.pk }}" {% if current_course.pk == c.pk %}selected{% endif %}>{{ c.code }} {{ c.name }}</option>{% endfor %}
+                </select>
+            </label>
+        {% endif %}
+        <label>关键词 <input type="text" name="q" value="{{ current_q|default:'' }}" placeholder="搜索…"></label>
+        <button class="btn" type="submit">筛选</button>
+    </form>
+    {% endif %}
+</div>
+
+<div class="card">
+    <table class="grid">
+        <thead><tr>{% for col in columns %}<th>{{ col }}</th>{% endfor %}{% if rows.0.actions %}<th>操作</th>{% endif %}</tr></thead>
+        <tbody>
+        {% for row in rows %}
+            <tr>
+                {% for cell in row.cells %}
+                    <td>{% if forloop.first and row.link %}<a class="link" href="{{ row.link }}">{{ cell }}</a>{% else %}{{ cell }}{% endif %}</td>
+                {% endfor %}
+                {% if row.actions %}
+                <td class="ops">
+                    {% for action in row.actions %}
+                        {% if action.disabled %}
+                            <span class="muted">{{ action.label }}</span>
+                        {% else %}
+                            <form method="post" action="{{ action.url }}" {% if action.confirm %}onsubmit="return confirm('{{ action.confirm }}')"{% endif %}>
+                                {% csrf_token %}<button class="btn tiny" type="submit">{{ action.label }}</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                {% endif %}
+            </tr>
+        {% empty %}
+            <tr><td colspan="{{ columns|length|add:1 }}" class="empty">暂无数据</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% if note %}<p class="note">{{ note }}</p>{% endif %}
+{% endblock %}

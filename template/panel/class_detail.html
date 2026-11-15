@@ -1,0 +1,30 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="cards">
+    <div class="stat"><span class="stat__label">学生数</span><b class="stat__value">{{ analytics|length }}</b><small>本教学班</small></div>
+    <div class="stat"><span class="stat__label">作业数</span><b class="stat__value">{{ assignments|length }}</b><small>含草稿</small></div>
+    {% if progress %}<div class="stat"><span class="stat__label">知识点</span><b class="stat__value">{{ progress.points }}</b><small>课程图谱</small></div>
+    <div class="stat"><span class="stat__label">题库</span><b class="stat__value">{{ progress.questions }}</b><small>可组卷</small></div>{% endif %}
+</div>
+
+<div class="card">
+    <h2 class="section-title">班级学情排名（多关键字排序：完成率 → 平均分 → 学号）</h2>
+    <table class="grid">
+        <thead><tr><th>#</th><th>学号</th><th>姓名</th><th>完成</th><th>完成率</th><th>平均分</th><th>正确率</th><th>待复习错题</th></tr></thead>
+        <tbody>{% for row in analytics %}
+            <tr><td>{{ forloop.counter }}</td><td>{{ row.user_id }}</td><td>{{ row.name }}</td>
+                <td>{{ row.done }}/{{ row.total }}</td><td>{% widthratio row.completion 1 100 %}%</td>
+                <td>{{ row.avg_score }}</td><td>{% widthratio row.accuracy 1 100 %}%</td><td>{{ row.wrong }}</td></tr>
+        {% empty %}<tr><td colspan="8" class="empty">暂无学生，请先在管理员端完成选课绑定</td></tr>{% endfor %}</tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2 class="section-title">本班作业</h2>
+    <table class="grid"><thead><tr><th>标题</th><th>状态</th><th>题目数</th><th>满分</th><th>提交数</th><th>详情</th></tr></thead>
+        <tbody>{% for a in assignments %}<tr><td>{{ a.title }}</td><td>{{ a.get_status_display }}</td><td>{{ a.questions.count }}</td><td>{{ a.total_score }}</td><td>{{ a.submissions.count }}</td><td><a class="link" href="{% url 'assignment_detail' a.pk %}">查看</a></td></tr>
+        {% empty %}<tr><td colspan="6" class="empty">暂无作业</td></tr>{% endfor %}</tbody></table>
+    <a class="btn primary" href="{% url 'assignment_form' %}">＋ 布置作业</a>
+</div>
+<a class="btn" href="{{ back_url }}">← 返回教学班列表</a>
+{% endblock %}

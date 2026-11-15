@@ -1,0 +1,36 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="toolbar"><div class="pills">
+    {% for c in classes %}<a class="pill {% if current.pk == c.pk %}active{% endif %}" href="?classroom={{ c.pk }}">{{ c.serial }}</a>{% endfor %}
+</div></div>
+
+{% if current %}
+<div class="split">
+    <div class="card">
+        <h2 class="section-title">添加绑定 · {{ current.serial }}</h2>
+        <form method="post" class="stack-form">
+            {% csrf_token %}
+            <div class="field"><label>教学班</label>{{ form.classroom }}</div>
+            <div class="field"><label>教师</label>{{ form.teacher }}<button class="btn primary" type="submit" name="action" value="add_teaching">绑定任课教师</button></div>
+            <div class="field"><label>学生</label>{{ form.student }}<button class="btn" type="submit" name="action" value="add_student">添加选课学生</button></div>
+            {% for error in form.non_field_errors %}<p class="err">{{ error }}</p>{% endfor %}
+        </form>
+    </div>
+    <div class="card">
+        <h2 class="section-title">任课教师（{{ teachings|length }}）</h2>
+        <table class="grid"><thead><tr><th>工号</th><th>姓名</th><th>操作</th></tr></thead><tbody>
+        {% for t in teachings %}<tr><td>{{ t.teacher.user_id }}</td><td>{{ t.teacher.display_name }}</td>
+            <td><form method="post">{% csrf_token %}<input type="hidden" name="action" value="remove_teaching"><input type="hidden" name="item_id" value="{{ t.pk }}"><button class="btn tiny" type="submit">解绑</button></form></td></tr>
+        {% empty %}<tr><td colspan="3" class="empty">暂无任课教师</td></tr>{% endfor %}</tbody></table>
+    </div>
+</div>
+
+<div class="card">
+    <h2 class="section-title">选课学生（{{ enrollments|length }}）</h2>
+    <table class="grid"><thead><tr><th>学号</th><th>姓名</th><th>加入时间</th><th>操作</th></tr></thead><tbody>
+    {% for e in enrollments %}<tr><td>{{ e.student.user_id }}</td><td>{{ e.student.display_name }}</td><td>{{ e.created_at|date:"Y-m-d" }}</td>
+        <td><form method="post">{% csrf_token %}<input type="hidden" name="action" value="remove_student"><input type="hidden" name="item_id" value="{{ e.pk }}"><button class="btn tiny" type="submit">移除</button></form></td></tr>
+    {% empty %}<tr><td colspan="4" class="empty">暂无学生</td></tr>{% endfor %}</tbody></table>
+</div>
+{% else %}<p class="empty">请先到课程下创建教学班。</p>{% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="card">
+    <h2 class="section-title">题目（{{ questions|length }} 题）</h2>
+    {% for q in questions %}
+        <div class="q-block">
+            <div class="q-block__head"><b>第 {{ forloop.counter }} 题</b>
+                <span class="tag">{{ q.get_qtype_display }}</span>
+                <span class="muted">{{ q.knowledge_point.name|default:"未分类" }} · {{ q.get_difficulty_display }} · {{ q.score }} 分</span>
+            </div>
+            <p>{{ q.title }}</p>
+            {% if q.qtype != 'SHORT' %}
+                <ul class="options">{% for key, text in q.option_pairs %}<li><b>{{ key }}</b> {{ text }}</li>{% endfor %}</ul>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+<div class="card narrow">
+    <h2 class="section-title">填写答案</h2>
+    <form method="post" class="stack-form">
+        {% csrf_token %}
+        {{ form }}
+        <div class="form-actions"><button class="btn primary" type="submit">提交作业</button>
+            <a class="btn" href="{{ back_url }}">返回作业列表</a></div>
+    </form>
+    <p class="note">客观题提交后自动判分；简答题会进入教师复核队列。每份作业只能提交一次。</p>
+</div>
+{% endblock %}

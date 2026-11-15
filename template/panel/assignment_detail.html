@@ -1,0 +1,41 @@
+{% extends "panel/base.html" %}
+{% block content %}
+<div class="split">
+    <div class="card">
+        <h2 class="section-title">作业信息</h2>
+        <dl class="kv">
+            <dt>标题</dt><dd>{{ assignment.title }}</dd>
+            <dt>教学班</dt><dd>{{ assignment.classroom.serial }}</dd>
+            <dt>状态</dt><dd>{{ assignment.get_status_display }}</dd>
+            <dt>题数 / 满分</dt><dd>{{ assignment.questions.count }} 题 / {{ assignment.total_score }} 分</dd>
+            <dt>截止</dt><dd>{{ assignment.due_at|date:"Y-m-d H:i"|default:"不限" }}</dd>
+            <dt>发布时间</dt><dd>{{ assignment.published_at|date:"Y-m-d H:i"|default:"未发布" }}</dd>
+            <dt>说明</dt><dd>{{ assignment.description|default:"—" }}</dd>
+        </dl>
+        {% if assignment.status == 'DRAFT' %}
+            <form method="post" action="{% url 'assignment_publish' assignment.pk %}" onsubmit="return confirm('发布后会通知全班学生，确定吗？')">
+                {% csrf_token %}<button class="btn primary" type="submit">发布并通知学生</button>
+            </form>
+        {% endif %}
+    </div>
+    <div class="card">
+        <h2 class="section-title">逐题正确率</h2>
+        <table class="grid"><thead><tr><th>#</th><th>题目</th><th>知识点</th><th>作答数</th><th>正确率</th><th>平均得分</th></tr></thead>
+            <tbody>{% for s in stats %}<tr><td>{{ s.order }}</td><td>{{ s.question.title|truncatechars:28 }}</td>
+                <td>{{ s.question.knowledge_point.name|default:"—" }}</td><td>{{ s.total }}</td>
+                <td>{% widthratio s.rate 1 100 %}%</td><td>{{ s.avg_score }}</td></tr>
+            {% empty %}<tr><td colspan="6" class="empty">暂无题目</td></tr>{% endfor %}</tbody></table>
+    </div>
+</div>
+
+<div class="card">
+    <h2 class="section-title">学生提交（{{ submissions|length }}）</h2>
+    <table class="grid"><thead><tr><th>学号</th><th>姓名</th><th>状态</th><th>得分</th><th>提交时间</th><th>操作</th></tr></thead>
+        <tbody>{% for sub in submissions %}<tr><td>{{ sub.student.user_id }}</td><td>{{ sub.student.display_name }}</td>
+            <td><span class="tag {% if sub.status == 'GRADED' %}ok{% else %}warn{% endif %}">{{ sub.get_status_display }}</span></td>
+            <td>{{ sub.score }}</td><td>{{ sub.submitted_at|date:"m-d H:i" }}</td>
+            <td><a class="btn tiny" href="{% url 'grading_detail' sub.pk %}">查看 / 复核</a></td></tr>
+        {% empty %}<tr><td colspan="6" class="empty">还没有学生提交</td></tr>{% endfor %}</tbody></table>
+</div>
+<a class="btn" href="{{ back_url }}">← 返回作业列表</a>
+{% endblock %}
