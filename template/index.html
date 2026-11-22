@@ -1,54 +1,49 @@
 {% extends "base.html" %}
-{# 这一行表示：布局用 base.html，下面只需要填 block 里的内容 #}
 
 {% block title %}{{ page_title }}{% endblock %}
 
 {% block content %}
     {% if audience == 'guest' %}
 
-        {# ---------- 没登录：介绍页 ---------- #}
         <section class="hero hero--guest">
-            <p class="kicker">Smart teaching platform</p>
+            <p class="meta">班级智能协作系统</p>
             <h1>课程、成员与班级事务<br>在这里汇合。</h1>
             <p class="lede">
-                ClassAgent 以教学班为单位组织课程、教师与学生，为课程智能体提供统一的数据底座。
+                以教学班为单位组织课程、教师与学生，为课程智能体提供统一的数据底座。
             </p>
-            <a class="btn btn--big" href="{% url 'login' %}">进入工作台 →</a>
+            <a class="btn btn--big" href="{% url 'login' %}">进入工作台</a>
         </section>
 
         <section class="caps" aria-label="系统能力">
             <article class="cap">
-                <span class="cap__no">01 / ADMIN</span>
-                <h2>管理员</h2>
-                <p>课程班配置、成员与角色管理、任课绑定与系统状态。</p>
+                <span class="cap__no">管理员</span>
+                <h2>教学班与成员</h2>
+                <p>创建教学班，维护科目学期，分配教师与学生账号。</p>
             </article>
             <article class="cap">
-                <span class="cap__no">02 / TEACHER</span>
-                <h2>教师</h2>
-                <p>查看任教班级、班级人数与授课关系，管理教学内容。</p>
+                <span class="cap__no">教师</span>
+                <h2>任教班级</h2>
+                <p>查看任教的班级、学生名单与班级规模。</p>
             </article>
             <article class="cap">
-                <span class="cap__no">03 / STUDENT</span>
-                <h2>学生</h2>
-                <p>查看已选教学班、授课教师与个人学习入口。</p>
+                <span class="cap__no">学生</span>
+                <h2>我的课程</h2>
+                <p>查看已选教学班、授课教师与个人信息。</p>
             </article>
         </section>
 
     {% else %}
 
-        {# ---------- 已登录：欢迎页 ---------- #}
         <section class="hero">
-            <p class="kicker">{{ role_label }} · {% now "Y-m-d" %}</p>
+            <p class="meta">{{ role_label }} · {% now "Y-m-d" %}</p>
             <h1>{{ headline }}</h1>
             <p class="lede">{{ lede }}</p>
-            <a class="btn btn--big" href="{% url 'core:dashboard' %}">进入工作台 →</a>
+            <a class="btn btn--big" href="{% url 'core:dashboard' %}">进入工作台</a>
         </section>
 
         <section class="caps" aria-label="{{ role_label }}能力概览">
-            {# capabilities 是 [(编号, 标题, 描述), ...]，Django 模板支持直接解包 #}
-            {% for code, title, desc in capabilities %}
+            {% for title, desc in capabilities %}
                 <article class="cap">
-                    <span class="cap__no">{{ code }}</span>
                     <h2>{{ title }}</h2>
                     <p>{{ desc }}</p>
                 </article>

@@ -10,7 +10,6 @@
 </head>
 <body>
 <div class="page">
-    {# 顶部导航：所有页面共用，所以写在 base 里 #}
     <header class="topbar">
         <a class="brand" href="{% url 'core:home' %}" aria-label="ClassAgent 首页">
             <span class="brand__mark" aria-hidden="true">CA</span>
@@ -19,8 +18,8 @@
                 <span class="brand__sub">班级智能协作系统</span>
             </span>
         </a>
+
         <nav class="topbar__nav">
-            {# user 是 Django 自动塞进模板的，不用在视图里传 #}
             {% if user.is_authenticated %}
                 <span class="who">
                     {{ user.display_name }}
@@ -28,21 +27,24 @@
                 </span>
                 <a class="btn btn--ghost" href="{% url 'core:dashboard' %}">工作台</a>
                 <a class="btn btn--ghost" href="{% url 'logout' %}">登出</a>
+                {% block topbar_actions %}{% endblock %}
             {% else %}
                 <a class="btn" href="{% url 'login' %}">账号登录</a>
             {% endif %}
         </nav>
     </header>
 
-    {# 子模板把自己的内容填到这里 #}
     <main class="wrap">
+        {% if messages %}
+            <div class="flash" role="status">
+                {% for message in messages %}
+                    <p class="flash__item flash__item--{{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block content %}{% endblock %}
     </main>
-
-    <footer class="footer">
-        <span>ClassAgent · 数据结构与算法基础课程项目</span>
-        <span>{% block footer_right %}数据源：本地 SQLite{% endblock %}</span>
-    </footer>
 </div>
 </body>
 </html>

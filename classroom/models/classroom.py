@@ -54,3 +54,12 @@ class Classroom(models.Model):
 
     def __str__(self) -> str:
         return f"{self.serial} ({self.subject}, {self.term})"
+
+    @property
+    def short_serial(self) -> str:
+        """页面上展示用的短编号。
+
+        serial 是 UUID 主键，完整长度 36 位，直接塞进表格会撑破列宽。
+        这里只取前 8 位，完整值仍可通过 serial 取到。
+        """
+        return str(self.serial)[:8]

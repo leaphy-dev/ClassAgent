@@ -2,93 +2,111 @@
 
 {% block title %}{{ page_title }}{% endblock %}
 
+{% block topbar_actions %}
+    <details class="namebox">
+        <summary class="btn btn--ghost namebox__toggle">更改名称</summary>
+        <form class="namebox__panel" method="post" action="{% url 'core:update_name' %}">
+            {% csrf_token %}
+            <label class="namebox__label" for="display-name">新的显示名称</label>
+            <input class="namebox__input" id="display-name" name="display_name" type="text"
+                   value="{{ user.display_name }}" maxlength="150" required>
+            <button class="btn namebox__save" type="submit">保存</button>
+        </form>
+    </details>
+{% endblock %}
+
 {% block content %}
-    {# ---------- 1. 标题区 ---------- #}
-    <section class="hero">
-        <p class="kicker">{{ role_label }} workspace · {% now "Y-m-d" %}</p>
-        <h1>{{ headline }}</h1>
-        <p class="lede">{{ lede }}</p>
-    </section>
+<div class="dash">
 
-    {# ---------- 2. 统计卡片 ---------- #}
-    <section class="stats" aria-label="概览数据">
-        {# cards 是 [{"label": ..., "value": ..., "hint": ...}, ...] #}
-        {% for card in cards %}
-            <article class="stat">
-                <span class="stat__label">{{ card.label }}</span>
-                <strong class="stat__value">{{ card.value }}</strong>
-                <span class="stat__hint">{{ card.hint }}</span>
-            </article>
-        {% endfor %}
-    </section>
+    <aside class="dash__side" aria-label="管理导航">
+        <p class="dash__side-title">管理</p>
+        <nav class="dash__nav">
+            <a class="dash__link" href="/admin/user/user/">用户管理</a>
+            <a class="dash__link" href="/admin/classroom/classroom/">班级管理</a>
+        </nav>
+    </aside>
 
-    {# ---------- 3. 教学班表格 ---------- #}
-    <section class="panel" aria-labelledby="classes-title">
-        <div class="panel__head">
-            <h2 id="classes-title">{{ table_title }}</h2>
-            <span class="panel__count">共 {{ classes|length }} 个</span>
-        </div>
-        <div class="table-scroll">
-            <table>
-                <thead>
-                    <tr>
-                        <th>编号</th>
-                        <th>科目</th>
-                        <th>学期</th>
-                        {% if show_counts %}<th>学生数</th>{% endif %}
-                        {% if show_teachers %}<th>授课教师</th>{% endif %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for klass in classes %}
-                        <tr>
-                            <td class="mono">{{ klass.serial }}</td>
-                            <td>{{ klass.subject }}</td>
-                            <td>{{ klass.term }}</td>
-                            {% if show_counts %}
-                                <td>{{ klass.student_count }}</td>
-                            {% endif %}
-                            {% if show_teachers %}
-                                <td>
-                                    {# klass.teachings.all 是反向关联：从班级拿到它的所有任课记录 #}
-                                    {% for teaching in klass.teachings.all %}
-                                        {{ teaching.teacher.display_name }}{% if not forloop.last %}、{% endif %}
-                                    {% empty %}
-                                        <span class="muted">暂未安排</span>
-                                    {% endfor %}
-                                </td>
-                            {% endif %}
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td class="empty" colspan="{{ colspan }}">{{ empty_hint }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
+    <div class="dash__main">
+        <section class="hero">
+            <p class="meta">{{ role_label }} · {% now "Y-m-d" %}</p>
+            <h1>{{ headline }}</h1>
+            <p class="lede">{{ lede }}</p>
+        </section>
 
-    {# ---------- 4. 账户与设置 ---------- #}
-    <section class="panel panel--gap" aria-labelledby="settings-title">
-        <div class="panel__head">
-            <h2 id="settings-title">账户与设置</h2>
-        </div>
-        <dl class="settings">
-            {# account_rows 是 [(标签, 值), ...] #}
-            {% for label, value in account_rows %}
-                <div>
-                    <dt>{{ label }}</dt>
-                    <dd>{{ value }}</dd>
-                </div>
+        <section class="stats" aria-label="概览数据">
+            {% for card in cards %}
+                <article class="stat">
+                    <span class="stat__label">{{ card.label }}</span>
+                    <strong class="stat__value">{{ card.value }}</strong>
+                    <span class="stat__hint">{{ card.hint }}</span>
+                </article>
             {% endfor %}
-        </dl>
-        <div class="settings__actions">
-            {# 只有真正有后台权限的人才显示这个按钮，避免死链接 #}
-            {% if user.is_staff or user.is_superuser %}
-                <a class="btn btn--ghost" href="/admin/">后台管理 →</a>
-            {% endif %}
-            <a class="btn btn--ghost" href="{% url 'logout' %}">退出登录</a>
-        </div>
-    </section>
+        </section>
+
+        <section class="panel" aria-labelledby="classes-title">
+            <div class="panel__head">
+                <h2 id="classes-title">{{ table_title }}</h2>
+                <span class="panel__count">{{ classes|length }} 个教学班</span>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>科目</th>
+                            <th>学期</th>
+                            {% if show_counts %}<th class="num">学生数</th>{% endif %}
+                            {% if show_teachers %}<th>授课教师</th>{% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for klass in classes %}
+                            <tr>
+                                <td class="mono" title="{{ klass.serial }}">{{ klass.short_serial }}</td>
+                                <td>{{ klass.subject }}</td>
+                                <td>{{ klass.term }}</td>
+                                {% if show_counts %}
+                                    <td class="num">{{ klass.student_count }}</td>
+                                {% endif %}
+                                {% if show_teachers %}
+                                    <td>
+                                        {% for teaching in klass.teachings.all %}
+                                            {{ teaching.teacher.display_name }}{% if not forloop.last %}、{% endif %}
+                                        {% empty %}
+                                            <span class="muted">未安排</span>
+                                        {% endfor %}
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td class="empty" colspan="{{ colspan }}">{{ empty_hint }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="panel panel--gap" aria-labelledby="settings-title">
+            <div class="panel__head">
+                <h2 id="settings-title">账户与设置</h2>
+            </div>
+            <dl class="settings">
+                {% for label, value in account_rows %}
+                    <div>
+                        <dt>{{ label }}</dt>
+                        <dd>{{ value }}</dd>
+                    </div>
+                {% endfor %}
+            </dl>
+            <div class="settings__actions">
+                {% if user.is_staff or user.is_superuser %}
+                    <a class="btn btn--ghost" href="/admin/">后台管理</a>
+                {% endif %}
+                <a class="btn btn--ghost" href="{% url 'logout' %}">退出登录</a>
+            </div>
+        </section>
+    </div>
+</div>
 {% endblock %}
